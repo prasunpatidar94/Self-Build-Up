@@ -1,0 +1,59 @@
+1. @SpringBootApplication =
+		@EnableAutoConfiguration (Spring-Stater-web autometic configuration)
+		+
+		@ComponentScan (scan to initilation beans with scan package with subpackahe and classes)
+		+
+		@Configuration (clear the configuration class we cna make bean instide it )
+		
+2. @Configuration = to delerat the class configuration so we can user the @bean sources of bean which retun benas that can hendel by IOC container  
+
+3. @Bean = to crate spring bean object at the tile of 		application loading
+
+4.@Autowired= to injection the dependency of class property, setter,constructor
+
+5. @component= if class is presnt the user @component on class level to tell Spring container create object for it and manage object life cycle.
+=======================
+@Component
+	@Controller (MVC application) 
+		@RestController(API Rest (JAson))
+	@Service (for bisness logic)
+	@Repository (dao object and data learyer )
+
+
+===============
+
+
+6. @ComponentScan = by default it is inside the @SpringBootApplication Anotaion but some tile we need to scan the some of the class outside the base packege the we need to user Ecplicity @ComponentScan(basePackages={"myexpackage","otherexpackage"}) where thewith he @configuration anotation whig is present insid ethe basepackage 
+
+7. @Qualifire = to reamove the conflict between the bean object to use, if the one object have multipal inplimentation 
+
+@Bean("student1") and  @Bean("student2")
+
+@Autowaired 
+@Qualifire("student1")//conflict gone 
+
+8.@Lazy= when requeired then we can create other wise not 
+@Bean("student1")
+@Lazy //eneble Laze Loading by default Eger Loading
+method level
+
+9. @Controller = use for MVC project application (tymlife) 
+	@RequestMepping(value="/data/user", method=RequestMethod.GET consumer= Jason Produces= xml)
+	controller method level endpoints
+	
+	@ResponceBody //(user too reponce on selialize and send json body or XML (explicity configure))
+	
+10 @RequestBody (to handel form data comming json to convert java objcet using desirilization using defalt constroctor )
+
+@ResuestBody --> desirilization (json or XML to Java Object)
+@ResponceBody --> serilization (java object to XML or JAson)
+
+
+11. @RestController = auto include @RequestBody And @ResponceBody no need to user explicitly in controller
+
+12. @PathVeriable("data") Integer pathdata... form /url/{data}   (user with GET)
+
+13. @requestParam("emailf") ---> data comming form like <input/> 
+
+
+
