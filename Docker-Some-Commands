@@ -1,0 +1,51 @@
+docker=>
+
+1. docker --help
+2. docker --version
+3. docker version --formate '{{json .}}'
+4. docker info 
+5. docker pull <image name >: <version or teg>
+6. docker image ls
+7. docker images
+8. docker run <image name >
+9. docker run -d <image idfr>
+10. docker ps (sees the all the running container )
+11. docker run -it redis
+12. docker run -d --name=redis_prasun redis
+13. docker run -it --name=myredis redis (so inside the image console)
+14. docker stats (get the information to docker mashine CPU MAMORY)
+15. docker serach redis
+16. docker search --filter=stars=3  --no-trunk limit 10 redis
+17. docker ps -a 
+18. docker 
+19. docker container stop <container id>
+20. docker stop <container id >
+21.docker container start redis_prasun (old container restart again with same configuration)
+22. docker container restart redis_prasun
+23. docker restart redis_prasun
+24. docker stop redis_prasun
+
+25.docker container rename <old name > <new namer > (rename the name )
+26. docker container ls -a
+27. docker container exec <image name > apt-get update
+28. docker container  stop $(docker ps -a -q)
+29. docker rm $(sudo docker ps -a -q)
+30. docker inspect redis_parsun (info all details on container )
+31. docker container kill <image name >(gres full kill in middle )
+32. docker kill $(docker ps -q)
+33. docker system prune(remove all containers aimages network , volumes etc)
+34. docker container logs
+35. docker container -f logs
+36. docker build -f "Dockerfile.txt"-t my name 
+37. docker image rm <image name or id >
+38. docker attach  redis_prasun (go inside the container system )
+39. docker image prune 
+40.
+41. docker top redis_prasun (what is top run image )
+42. docker container prune (delete all the container in the not running )
+
+43 docker volume create my vall
+44. docker volume rm <name >
+45. docker run --name=mycont --mount source=myvall ,target=app/regis readonly redis
+
+46. docker cp . redis_prasun:/app/data  (copy  file from extern to inside ethe docker container )
