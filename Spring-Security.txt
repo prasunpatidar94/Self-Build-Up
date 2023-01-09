@@ -1,0 +1,171 @@
+==============================================Day : 1================================================= 
+
+1. what is sqcurity in Spring boot?
+A. it is the way to secure the controller to access by unwanted sources like hacureand not athenticat person form outer word
+
+2. Types of Security?
+A.  1. basic Security 
+    2. form based Security
+        a. InMemory athentication
+        b. User Detailes (ORM/JPA)
+    3. JWT And Spring Boot JWT
+    4. Open Atyhentication (OAuth 2.x)
+
+3. need of Security:
+a.  a. secure the endpoints
+    b. only athentication person can acces the application.
+    c. prevent the application from unwanted modification ,access etc.
+
+4. where we can put the Security in your microsorvices application?
+A. at api getway, as filter , before the entry point of controller .
+
+5. most user secu technologies in microservices:
+A . a. JWT (java web Tockens)
+    b. OAuth 2.x
+
+6. which is first exceute before the controller?
+A. filters (delegating filter proxy)
+
+7. Zero Security in spring Security?
+A. just add the sering Security depenency  and run the application it will give the UUID and defalt user "user" and bydefalt it will give credentials.
+     username : user
+     Passward : 1e0e761f-793d-496a-a060-5a9a3613efd9
+    we can change the user and passward from application.properties like this 
+        server.port=8585
+        spring.security.user.name=prasun
+        spring.security.user.password=123@123
+
+================================================================================================
+                        JAAS (java athentication and authorication service)
+
+it will give the defalt security in spring boot application which is given by sun mircosystem 
+
+8. what is Atyhentication and Athorization?
+A.  =>Athentication : how are you ? (woring on Validation of the user by using the user name and passward)
+    =>Authorization : what you have access permitions (with with the roles and Authoritys)
+
+    Catagories :
+        permitAll() = > pull all the pages which is not requires to athentication  like support etc.
+        authenticated() = > need to loging required  the we can access the pages 
+        hasAuthority()/hasAnyAuthority() = > only athenticated person can acces the pages after the login and roles matched 
+    Note ; > we need to configer the URL inside the security bases on the requiremnet.
+
+9. how will do Athentication and Authorization concept in spring Security?
+A. WebSecurityConfiguerAdapter 
+    it have two methods :
+            
+        method ::   configure(AthenticationManagerBuilder) :: void  : for Athentiocation
+        method ::  configure(HttpsSecurity)                :: void  : for Authorization
+
+==============================================Day : 2=================================================== 
+Spring Boot : Spring Security Using JAAS
+---------------------------------------->
+
+10. what is DelegatingFilterProxy and how it will work ?
+A. It is the types of defalt filter which run before the controller in spring boot  and acll internaly to
+    WebSecurityConfiguerAdapter for authorication (configure(AthenticationManagerBuilder)) and 
+    Authorization (configure(HttpsSecurity)) perpose.
+
+11. how to create security configure class in spring boot application?
+A. steps:
+    1. create a class and extends WebSecurityConfiguerAdapter class
+    2. impliment the two methods from WebSecurityConfiguerAdapter 1st configure(AthenticationManagerBuilder)
+         2nd configure(HttpsSecurity) 
+    3. Anotated class with @Configuration and @EnableWebSecurity 
+
+12. methods of spring security for Authorization :
+A. there are some IMP methods which can help to configuration of Authorization:
+    a. antMatchers(path or url of controller) : it can be check every request path and check the path an filter 
+        it all according to the conditaion if pass the go for athentication and Authorization .
+    b. .antMatchers("/user.inbox").authenticated() :  only after the login
+    c. .antMatchers("user/apprave").hasAuthority("manager"): only after login and acces only for manager only
+    d. .antMatchers("user/apprave").hasAnyAuthority("manager","Banker") : only after login and acces by mamager or Banker
+    e. .antMatchers("gmail/home").permitAll() : no need to login just use it 
+    f. .antMatchers("gmail/modification").hasAuthority("Admin"): after login Admin can access 
+    g. .antMatchers("gmail/data").athenticated() : need login but no need to requeired any roles
+    h. .antMatchers("gmail/inbox").authenticated(): only after login 
+    i. .antMatchers("emp/*").hasAuthority("ADMIN") 
+        or
+        .antMatchers("emp/delete","emp/export","emp/one","emp/modification").hasAuthority("ADMIN") : only aftyer the login 
+         and acces by the "ADMIN" roles
+    j. .antMatchers("/export*").hasAuthority("ADMIN") : after login  only acces for which start with "export" 
+        and hear "*" menas any char form 0 to n after the word
+    k. .antMatchers("/emp/**").hasAuthority("ADMIN") : "**" means multilevel path 
+            FORMATE :
+               1. /path*  : valid if any char after the path but 2nd / will not allow 
+                            Valid : "/emp*"-> /empdata, / emplogin, /emplogin
+                            Invalid: "/emp/data"-> emp/data, emp/login etc
+
+               2. /path/* : valid  if second path should have the last path but not allow the nth poath after it
+                            valid : emp/data, emp/pilo , emp/logdata etc
+                            invalid ; emp/data/log, emp/data/info, emp/log/user etc
+
+        IMP    3. /path** : valid if the nth path present after the selected path  even chars also 
+                            valid : /empdata, /emp/data, emp/data/info/user, /emp
+                
+               4. /path/**: valid if must have second path and allow the all data 
+
+13. if 2000 url path the how we can configure that?
+A.  we nee to user .anyRequest() , after map the some of the path then we need to use .anyRequest() merthod 
+    with any condition
+
+        http.authorizeRequests()
+            .antMatchers("user/apprave").hasAnyAuthority("manager","Banker") 
+            .antMatchers("gmail/home").permitAll() 
+            .antMatchers("gmail/modification").hasAuthority("Admin")
+            .antMatchers("gmail/data").athenticated() 
+            .antMatchers("gmail/inbox").authenticated()
+            .anyRequest().permitAll()
+                or
+             .anyRequest().authenticated()
+                 or
+             .anyRequest().hasAuthority("User");
+
+===============================================Day : 3 ============================================================
+
+14 . what is inMemoryAthentication ?
+A. it is the away to store the user passward ,username and Roles in side the temp memory tha is nothing but the 
+    inMemoryAthentication.
+    note : best use for testion and all  but not user in production env.
+
+15. what is NoOpPasswardEncoder (noop)  ?
+A. it this the way to bypass the encodeing activity in spring security atyhentication process and store the password
+    in palan text as user entered as the time of registration .
+    Note : not use for the production  only use for the testing or developemt perpouse.
+
+16. crate inMemoryAthentication athenication /
+A. code:
+
+        @Configuration
+        @EnableWebSecurity
+        public class SecurityConfig  extends WebSecurityConfiguerAdapter{
+
+            public void configure(AuthenticationManagerBuilder atyhentication){
+                atyhentication
+                    .inMemoryAthentication()
+                        .withUser("prasun")
+                        .passward("{noop}123@123")
+                        .authorities("EMP");
+                atyhentication
+                    .inMemoryAthentication()
+                        .withUser("ram")
+                        .passward("{noop}123@123")
+                        .authorities("MANAGER");
+                atyhentication
+                    .inMemoryAthentication()
+                        .withUser("mahakal")
+                        .passward("{noop}123@123")
+                        .authorities("ADMIN");
+
+            }
+
+         public void configure(HttpsSecurity http){
+
+                
+            }
+
+        } 
+
+
+
+
