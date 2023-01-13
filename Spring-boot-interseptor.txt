@@ -1,0 +1,72 @@
+POC Project:  Spring-Boot-Pocs\SpringBootWeb2InterseptorWithSepringBoot
+
+
+1. what is interseptor?
+A. it is the type of by defalut filter in spring boot with can execute
+     -> before the controller at the time of request comming 
+     -> before the responce the client
+     -> after the complition of request 
+
+2. what are the steps and class or interface or methods used to enable the interseptor in spring boot application ?
+A. this are the some methods and interface which we caan user :
+    steps: 
+        1. create userdefined interseptor class 
+        2. put @Component anotation on top of class 
+        3. impliment HandlerInterceptor interface in our class with some below methods 
+                1. preHandler() : boolean :: execute before the controller
+                2. preHandler() : void :: execute before the client responce
+                3. afterCompletion() : void :: execute after the client responce or complite the resuest 
+        4 create Interceptor registory to registor the all Interceptor of application and user it 
+                1. create user defined class and put @Configuration anotation on top of current class
+                2. impliment the WebMvcConfigurer interface and give the custome defination for below methods
+                        addInterceptors(InterceptorRegistry) : void 
+
+    code:
+         creation:  GernarlInterceptor=> HandlerInterceptor(I)
+
+            @Component
+            @Slf4j
+            public class GernarlInterceptor implements HandlerInterceptor {
+                @Override
+                public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+                    log.info("preHandle involved .... {},{},{}",this.getClass() ,request.getRequestURI(), request.getMethod());
+                    return true;
+                }
+
+                @Override
+                public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+                    log.info("postHandle involved .... {},{},{}",this.getClass() ,request.getRequestURI(), request.getMethod());
+                }
+
+                @Override
+                public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+                    log.info("afterCompletion involved ....{},{},{}",this.getClass() , request.getRequestURI(), request.getMethod());
+                    if (ex != null)
+                        log.info("exception  involved .... {},{},{}",this.getClass() , ex.getCause(), ex.getMessage());
+
+                }
+            }
+        
+        
+
+
+        Registry Interceptor :InterseptorConfig => WebMvcConfigurer(I)
+        
+            @Configuration
+            public class InterseptorConfig implements WebMvcConfigurer {
+
+                @Autowired
+                private GernarlInterceptor gernarlInterceptor;
+                @Autowired
+                private CustomerInterceptor customerInterceptor;
+                @Autowired
+                private OrderInterceptor orderInterceptor;
+
+                @Override
+
+                public void addInterceptors(InterceptorRegistry registry) {
+            //        registry.addInterceptor(gernarlInterceptor).order(3);
+                    registry.addInterceptor(customerInterceptor).addPathPatterns("/customer/**");
+                    registry.addInterceptor(orderInterceptor).addPathPatterns("/order/**");
+                }
+            }
