@@ -4,12 +4,12 @@ public class PrimeNumberWithFermatsLittleTheorem {
     public static void main(String[] args) {
 
 
-//        for (int i = 0; i < 100; i++) {
-//            System.out.print(isPrimeValue(i) ? i + ", " : "");
-//        }
+        for (int i = 0; i < 100; i++) {
+            System.out.print(isPrimeValue(i) ? i + ", " : "");
+        }
 
-        int n= 99;
-        System.out.print(isPrimeValue(n));
+//        int n= 99;
+//        System.out.print(isPrimeValue(n));
     }
 
     public static boolean isPrimeValue(Integer n) {
@@ -25,7 +25,8 @@ public class PrimeNumberWithFermatsLittleTheorem {
         }
         else
         {
-            Integer p = (2^n-1)%n;
+//            Integer p = (2^n-1)%n;
+            Integer p= (int) (Math.pow(2,n-1)%n);
             if (p==1)
                 return true;
             else
